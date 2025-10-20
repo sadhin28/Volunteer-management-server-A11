@@ -1,23 +1,13 @@
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
-// const cookieParser = require('cookie-parser'); // uncomment if using cookies
-
+const cors = require('cors')
 const port = process.env.PORT || 5000;
-const app = express();
-
-// Middleware
+const app = express()
+require('dotenv').config()
 app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-// app.use(cookieParser()); // uncomment if using cookies
-
-// Test routes
-app.get('/', (req, res) => res.send('Volunteer hub is running'));
-app.get('/ping', (req, res) => res.send('Pong'));
-
-// MongoDB URI
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://${process.env.USER_NAME}:${process.env.USER_PASS}@cluster0.fyfyih2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -28,8 +18,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
     try {
-        // Connect to MongoDB
-        await client.connect();
+       
         const addVolunteerDataCollection = client.db('NeedVolunteer').collection('NeedVolunteerData');
 
         // Get all volunteers
@@ -77,17 +66,14 @@ async function run() {
             const result = await addVolunteerDataCollection.find({ Organizer_email: email }).toArray();
             res.send(result);
         });
-
         await client.db("admin").command({ ping: 1 });
-        console.log("Successfully connected to MongoDB!");
-    } catch (err) {
-        console.error(err);
+        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    } finally {
+
     }
 }
-
 run().catch(console.dir);
 
-// Start server
 app.listen(port, () => {
-    console.log(`Volunteer hub server running on port: ${port}`);
-});
+    console.log(`Volunteer server is running:${port}`)
+})
