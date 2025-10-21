@@ -21,7 +21,19 @@ async function run() {
     try {
        
         const addVolunteerDataCollection = client.db('NeedVolunteer').collection('NeedVolunteerData');
-
+        //Get upcommit deadline data limit 6
+        app.get('/upcoming-deadline',async (req,res)=>{
+            try{
+                const result = await addVolunteerDataCollection.find()
+                .sort({Deadline:1})
+                .limit(6)
+                .toArray();
+                res.status(200).send(result);
+            }catch (error){
+                console.error("error fetching post by upcomming deadline",error);
+                res.status(500).send({message:"Internal Server Error"})
+            }
+        })
         // Get all volunteers
         app.get('/addVolunteer', async (req, res) => {
             const result = await addVolunteerDataCollection.find().toArray();
