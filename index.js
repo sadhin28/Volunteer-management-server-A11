@@ -5,7 +5,7 @@ const app = express()
 app.use(express.json({ limit: '50mb' }));
 require('dotenv').config()
 app.use(cors());
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion,ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.USER_NAME}:${process.env.USER_PASS}@cluster0.fyfyih2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -43,6 +43,7 @@ async function run() {
         // Get volunteer by ID
         app.get('/addVolunteer/:id', async (req, res) => {
             const id = req.params.id;
+            console.log(id)
             const result = await addVolunteerDataCollection.findOne({ _id: new ObjectId(id) });
             res.send(result);
         });
