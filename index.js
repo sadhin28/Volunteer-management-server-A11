@@ -55,7 +55,7 @@ async function run() {
             const result = await addVolunteerDataCollection.findOne({ _id: new ObjectId(id) });
             res.send(result);
         });
-        // Get apply volunteer  volunteer by ID
+        // Get apply   volunteer by ID
         app.get('/apply-volunteer/:id', async (req, res) => {
             const id = req.params.id;
             console.log(id)
@@ -81,6 +81,12 @@ async function run() {
             const result = await addVolunteerDataCollection.deleteOne({ _id: new ObjectId(id) });
             res.send(result);
         });
+        // Delete apply   volunteer
+        app.delete('/apply-volunteer/:id', async (req, res) => {
+            const id = req.params.id;
+            const result = await applyVolunteerCollection.deleteOne({ _id: new ObjectId(id) });
+            res.send(result);
+        });
 
         // Update a volunteer
         app.put('/addVolunteer/:id', async (req, res) => {
@@ -98,6 +104,12 @@ async function run() {
         app.get('/my-post', async (req, res) => {
             const email = req.query.email;
             const result = await addVolunteerDataCollection.find({ Organizer_email: email }).toArray();
+            res.send(result);
+        });
+        // Get apply volunteer by organizer email
+        app.get('/apply-volunteer', async (req, res) => {
+            const email = req.query.email;
+            const result = await applyVolunteerCollection.find({ Organizer_email: email }).toArray();
             res.send(result);
         });
         await client.db("admin").command({ ping: 1 });
