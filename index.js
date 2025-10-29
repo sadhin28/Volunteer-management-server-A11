@@ -23,7 +23,10 @@ async function run() {
         const addVolunteerDataCollection = client.db('NeedVolunteer').collection('NeedVolunteerData');
         const applyVolunteerCollection=client.db('ApplyVolunteer').collection('ApplyVolunteerData');
         //Get upcommit deadline data limit 6
--+-+
+-+-+    
+        app.get('/', (req, res) => {
+            res.send('Volunteer server is running')
+        });
         app.get('/upcoming-deadline',async (req,res)=>{
             try{
                 const result = await addVolunteerDataCollection.find()
