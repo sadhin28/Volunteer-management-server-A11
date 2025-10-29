@@ -21,7 +21,9 @@ async function run() {
     try {
        
         const addVolunteerDataCollection = client.db('NeedVolunteer').collection('NeedVolunteerData');
+        const applyVolunteerCollection=client.db('ApplyVolunteer').collection('ApplyVolunteerData');
         //Get upcommit deadline data limit 6
+-+-+
         app.get('/upcoming-deadline',async (req,res)=>{
             try{
                 const result = await addVolunteerDataCollection.find()
@@ -39,12 +41,25 @@ async function run() {
             const result = await addVolunteerDataCollection.find().toArray();
             res.send(result);
         });
-
+       
+        // Get all apply volunteers
+        app.get('/apply-volunteer', async (req, res) => {
+            const result = await applyVolunteerCollection.find().toArray();
+            res.send(result);
+        });
+       
         // Get volunteer by ID
         app.get('/addVolunteer/:id', async (req, res) => {
             const id = req.params.id;
             console.log(id)
             const result = await addVolunteerDataCollection.findOne({ _id: new ObjectId(id) });
+            res.send(result);
+        });
+        // Get apply volunteer  volunteer by ID
+        app.get('/apply-volunteer/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id)
+            const result = await applyVolunteerCollection.findOne({ _id: new ObjectId(id) });
             res.send(result);
         });
 
@@ -54,7 +69,12 @@ async function run() {
             const result = await addVolunteerDataCollection.insertOne(newVolunteerNeed);
             res.send(result);
         });
-
+       // post apply volunteer
+       app.post('/apply-volunteer', async (req,res)=>{
+        const applyVolunteer = req.body;
+        const result = await applyVolunteerCollection.insertOne(applyVolunteer);
+        res.send(result);
+       })
         // Delete a volunteer
         app.delete('/addVolunteer/:id', async (req, res) => {
             const id = req.params.id;
