@@ -51,22 +51,20 @@ async function run() {
     // ✅ Example: volunteer route
     app.get("/addVolunteer", async (req, res) => {
       try {
-        const search = req.query.search || "";
+        const search = req.query.Post_Title || "";
 
-        // 🔍 Create MongoDB query
         const query = search
-          ? { Post_Title: { $regex: search, $options: "i" } } // case-insensitive regex
+          ? { Post_Title: { $regex: search, $options: "i" } }
           : {};
 
-        // ✅ Use .find() (NOT .filter())
         const result = await addVolunteerDataCollection.find(query).toArray();
-
-        res.status(200).send(result);
+        res.send(result);
       } catch (error) {
         console.error("Error fetching volunteers:", error);
-        res.status(500).send({ message: "Internal Server Error" });
+        res.status(500).send({ message: "Internal server error" });
       }
     });
+
 
     // Get all apply volunteers
     app.get("/apply-volunteer", async (req, res) => {
