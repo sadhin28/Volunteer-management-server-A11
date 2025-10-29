@@ -44,7 +44,14 @@ async function run() {
             const result = await addVolunteerDataCollection.find().toArray();
             res.send(result);
         });
-       
+        
+        //Serch volunteer by title
+        app.get("addvolunteer", async(req,res)=>{
+            const title = req.query.title;
+            const query = { title: { $regex: title, $options: "i" } };
+            const result = await addVolunteerDataCollection.find(query).toArray();
+            res.send(result);
+        })
         // Get all apply volunteers
         app.get('/apply-volunteer', async (req, res) => {
             const result = await applyVolunteerCollection.find().toArray();
