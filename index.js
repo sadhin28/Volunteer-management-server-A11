@@ -65,7 +65,6 @@ async function run() {
       }
     });
 
-
     // Get all apply volunteers
     app.get("/apply-volunteer", async (req, res) => {
       const result = await applyVolunteerCollection.find().toArray();
@@ -151,6 +150,16 @@ async function run() {
       const email = req.query.email;
       const result = await applyVolunteerCollection
         .find({ Organizer_email: email })
+        .toArray();
+      res.send(result);
+    });
+    // Get posts by applycant email
+    app.get("/apply-volunteer", async (req, res) => {
+      const email = req.query.email;
+      const result = await addVolunteerDataCollection
+        .find({
+          applycant_email: email,
+        })
         .toArray();
       res.send(result);
     });
