@@ -154,15 +154,24 @@ async function run() {
       res.send(result);
     });
     // Get posts by applycant email
-    app.get("/apply-volunteer", async (req, res) => {
-      const email = req.query.email;
-      const result = await addVolunteerDataCollection
-        .find({
-          applycant_email: email,
-        })
-        .toArray();
-      res.send(result);
-    });
+   app.get("/apply-volunteer", async (req, res) => {
+  try {
+    const email = req.query.email;
+
+    if (!email) {
+      return res.status(400).send({ message: "Email query parameter is required" });
+    }
+
+    const result = await applyVolunteerCollection
+      .find({ applycant_email: email }) 
+      .toArray();
+
+    res.send(result);
+  } catch (error) {
+    console.error("Error fetching volunteer applications:", error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
     await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
