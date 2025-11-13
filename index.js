@@ -146,25 +146,22 @@ async function run() {
       res.send(result);
     });
     // Get apply volunteer by organizer email
-    app.get("/apply-volunteer", async (req, res) => {
-      const email = req.query.email;
-      const result = await applyVolunteerCollection
-        .find({ Organizer_email: email })
-        .toArray();
-      res.send(result);
-    });
-    // Get posts by applycant email
-   app.get("/apply-volunteer", async (req, res) => {
+  app.get("/apply-volunteer", async (req, res) => {
   try {
-    const email = req.query.email;
+    const email = req.query.email; // frontend theke ?email= pathabe
 
     if (!email) {
       return res.status(400).send({ message: "Email query parameter is required" });
     }
 
+    // ✅ Sudhu oi email er data filter korbe
     const result = await applyVolunteerCollection
-      .find({ applycant_email: email }) 
+      .find({ applycant_email: email })
       .toArray();
+
+    if (!result.length) {
+      return res.status(404).send({ message: "No applications found for this email" });
+    }
 
     res.send(result);
   } catch (error) {
@@ -172,6 +169,8 @@ async function run() {
     res.status(500).send({ message: "Internal server error" });
   }
 });
+
+
     await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
